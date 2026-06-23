@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Beginning ❤️ — Birthday Website</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .childhood-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 24px 80px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: var(--ff-body);
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 24px;
+    }
+
+    /* Photo frame with golden border + shimmer */
+    .frame-outer {
+      position: relative;
+      display: inline-block;
+      margin: 32px 0 40px;
+    }
+    .frame-golden-border {
+      padding: 4px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #ffd700, #ff6b9d, #c084fc, #ffd700);
+      background-size: 300% 300%;
+      animation: borderShimmer 4s ease infinite;
+      box-shadow: 0 0 40px rgba(255,107,157,0.35), 0 0 80px rgba(192,132,252,0.2);
+    }
+    @keyframes borderShimmer {
+      0%,100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+    .frame-inner {
+      border-radius: 24px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(192,132,252,0.3), rgba(255,107,157,0.3));
+      width: min(300px, 80vw);
+      height: min(380px, 72vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+    }
+    .frame-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      border-radius: 24px;
+    }
+    .frame-placeholder-ico { font-size: 3.5rem; opacity: 0.4; }
+    .frame-placeholder-txt {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+    }
+
+    /* Floating mini stars around frame */
+    .frame-star {
+      position: absolute;
+      animation: floatStar ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes floatStar {
+      0%,100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+      50%      { transform: translateY(-12px) rotate(20deg); opacity: 1; }
+    }
+
+    /* Caption cards */
+    .caption-card {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 28px 32px;
+      max-width: 520px;
+      width: 100%;
+      margin-bottom: 32px;
+    }
+    .caption-line {
+      font-family: var(--ff-serif);
+      font-size: clamp(1rem, 2.8vw, 1.25rem);
+      color: rgba(255,255,255,0.88);
+      font-style: italic;
+      line-height: 1.9;
+    }
+    .caption-line + .caption-line {
+      margin-top: 12px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Decorative elements */
+    .nebula-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(124,58,237,0.14) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.12) 0%, transparent 55%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="nightSky"></canvas>
+  <div class="nebula-bg"></div>
+  <div class="floating-hearts-container" id="floatingHearts"></div>
+
+  <!-- Moon -->
+  <div class="moon"></div>
+
+  <!-- Music Player -->
+  <div class="music-player">
+    <button id="musicToggle">▶</button>
+    <span id="musicLabel" class="music-note-anim">Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="audio/background-music.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <!-- Nav dots -->
+  <nav class="nav-progress" aria-label="Page navigation">
+    <a href="index.html" title="Cover"></a>
+    <a href="childhood.html" class="active" title="Childhood"></a>
+    <a href="present.html" title="Present"></a>
+    <a href="story.html" title="Our Story"></a>
+    <a href="dreamworld.html" title="Dream World"></a>
+    <a href="giftbox.html" title="Gift Box"></a>
+    <a href="letter.html" title="Letter"></a>
+    <a href="reasons.html" title="Reasons"></a>
+    <a href="future.html" title="Future"></a>
+    <a href="secretheart.html" title="Secret Heart"></a>
+    <a href="cake.html" title="Cake"></a>
+    <a href="final.html" title="Final"></a>
+  </nav>
+
+  <main class="childhood-scene">
+    <p class="eyebrow" data-reveal>✦ Chapter 1 — Where it all began ✦</p>
+
+    <h2 class="heading-script" data-reveal style="margin-bottom:8px">The Beginning</h2>
+    <p class="heading-display" data-reveal style="font-size:clamp(1rem,2.5vw,1.4rem);margin-bottom:32px">24 June 2006</p>
+
+    <!-- PHOTO FRAME -->
+    <!-- Replace childhood.jpg with boyfriend's childhood photo -->
+    <div class="frame-outer" data-reveal>
+      <div class="frame-golden-border">
+        <div class="frame-inner">
+          <!-- Replace the placeholder below with an <img> tag once you add the photo -->
+          <!-- <img src="images/childhood.jpg" alt="Childhood photo" /> -->
+          <!-- Replace with boyfriend childhood photo -->
+          <img src="images/childhood.jpeg" alt="Childhood photo" />
+          <span class="frame-placeholder-txt" style="font-size:0.65rem;opacity:0.5">images/childhood.jpg</span>
+        </div>
+      </div>
+
+      <!-- Floating stars around the frame -->
+      <span class="frame-star" style="top:-18px;left:20px;font-size:1.2rem;animation-duration:2.5s">⭐</span>
+      <span class="frame-star" style="top:-10px;right:10px;font-size:0.9rem;animation-duration:3s;animation-delay:0.5s">✨</span>
+      <span class="frame-star" style="bottom:-14px;left:10px;font-size:1rem;animation-duration:2.8s;animation-delay:1s">💫</span>
+      <span class="frame-star" style="bottom:-10px;right:20px;font-size:1.1rem;animation-duration:2.2s;animation-delay:0.3s">🌟</span>
+    </div>
+
+    <!-- CAPTIONS -->
+    <div class="caption-card" data-reveal>
+      <p class="caption-line">On 24 June 2006...a little boy entered this world 🫣🤩😇</p>
+      <p class="caption-line">"Years later, he would unknowingly become one of the most important people in my life🥰❤️‍🩹💓"</p>
+    </div>
+
+    <div class="romantic-divider" data-reveal>
+      <span>❤️</span>
+    </div>
+
+    <!-- CTA -->
+    <a href="present.html" class="btn-romantic" data-reveal style="margin-top:24px">
+      <span>See What Happened Next ❤️</span>
+    </a>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

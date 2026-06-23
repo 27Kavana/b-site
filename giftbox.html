@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Special Gift For You ❤️ — Birthday Website</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .gift-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 24px 80px;
+      text-align: center;
+    }
+
+    .dark-magic {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 50% 60%, rgba(124,58,237,0.25) 0%, transparent 60%),
+        radial-gradient(ellipse at 20% 20%, rgba(255,107,157,0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(192,132,252,0.14) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* ── GIFT BOX ── */
+    .gift-stage {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 32px 0;
+    }
+
+    .gift-box-wrap {
+      cursor: pointer;
+      position: relative;
+      display: inline-block;
+      user-select: none;
+    }
+    .gift-box-wrap:hover .gift-box-body { transform: scale(1.04); }
+
+    .gift-box-body {
+      width: 160px;
+      height: 140px;
+      background: linear-gradient(160deg, #5b0e6e, #7c3aed);
+      border-radius: 12px 12px 16px 16px;
+      position: relative;
+      box-shadow: 0 0 50px rgba(124,58,237,0.5), 0 0 100px rgba(124,58,237,0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    .gift-box-body::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 18px; height: 100%;
+      background: rgba(255,215,0,0.5);
+    }
+    .gift-box-body::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0; right: 0;
+      height: 18px; transform: translateY(-50%);
+      background: rgba(255,215,0,0.5);
+    }
+    .gift-box-lid {
+      width: 180px;
+      height: 44px;
+      background: linear-gradient(160deg, #7c0ea8, #9d4edd);
+      border-radius: 10px;
+      margin-left: -10px;
+      position: relative;
+      transform-origin: bottom center;
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 -4px 20px rgba(157,78,221,0.4);
+      z-index: 2;
+    }
+    .gift-box-lid::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%; transform: translateX(-50%);
+      width: 18px; height: 100%;
+      background: rgba(255,215,0,0.5);
+    }
+    /* Bow */
+    .gift-bow {
+      position: absolute;
+      top: -28px; left: 50%;
+      transform: translateX(-50%);
+      font-size: 2.8rem;
+      filter: drop-shadow(0 0 10px rgba(255,215,0,0.6));
+      animation: bowPulse 2s ease-in-out infinite;
+    }
+    @keyframes bowPulse {
+      0%,100% { transform: translateX(-50%) scale(1); }
+      50%      { transform: translateX(-50%) scale(1.12); }
+    }
+
+    /* Glow ring under box */
+    .gift-glow-ring {
+      width: 200px; height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(124,58,237,0.5) 0%, transparent 70%);
+      margin-top: -8px;
+      filter: blur(8px);
+      animation: glowRingPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes glowRingPulse {
+      0%,100% { opacity: 0.5; transform: scaleX(1); }
+      50%      { opacity: 1; transform: scaleX(1.15); }
+    }
+
+    /* Hint text */
+    .gift-hint {
+      font-family: var(--ff-serif);
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 28px;
+    }
+
+    /* ── REVEAL (hidden initially) ── */
+    .gift-reveal {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      animation: revealFadeIn 1s ease forwards;
+    }
+    .gift-reveal.show { display: flex; }
+    @keyframes revealFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Girl photo in gift */
+    .girl-photo-frame {
+      position: relative;
+      display: inline-block;
+    }
+    .girl-photo-ring {
+      width: min(240px, 70vw);
+      height: min(240px, 70vw);
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffd700, #ff6b9d, #c084fc, #ffd700);
+      background-size: 300% 300%;
+      animation: borderShimmer 3s ease infinite;
+      padding: 4px;
+      box-shadow: 0 0 60px rgba(255,107,157,0.5), 0 0 120px rgba(192,132,252,0.3);
+    }
+    @keyframes borderShimmer {
+      0%,100% { background-position: 0% 50%; }
+      50%      { background-position: 100% 50%; }
+    }
+    .girl-photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(160deg, rgba(124,58,237,0.4), rgba(255,107,157,0.4));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      overflow: hidden;
+    }
+    .girl-photo-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      animation: slowZoom 8s ease-in-out infinite alternate;
+    }
+    @keyframes slowZoom {
+      from { transform: scale(1); }
+      to   { transform: scale(1.1); }
+    }
+
+    /* Speech bubbles */
+    .speech-sequence {
+      max-width: 500px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .speech-bubble {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 20px 20px 20px 4px;
+      padding: 14px 20px;
+      font-family: var(--ff-serif);
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.9);
+      text-align: left;
+      opacity: 0;
+      transform: translateX(-15px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .speech-bubble.visible { opacity: 1; transform: translateX(0); }
+    .speech-bubble.bold {
+      background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(192,132,252,0.2));
+      border-color: rgba(255,107,157,0.3);
+      font-family: var(--ff-display);
+      font-size: clamp(1rem, 2.8vw, 1.2rem);
+      font-style: normal;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* Glowing heart gift */
+    .glowing-heart-give {
+      font-size: 4rem;
+      filter: drop-shadow(0 0 20px rgba(255,107,157,0.9));
+      animation: heartGive 1.5s ease-in-out infinite;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .glowing-heart-give.visible { opacity: 1; }
+    @keyframes heartGive {
+      0%,100% { transform: scale(1) translateY(0); filter: drop-shadow(0 0 20px rgba(255,107,157,0.9)); }
+      50%      { transform: scale(1.25) translateY(-10px); filter: drop-shadow(0 0 40px rgba(255,107,157,1)); }
+    }
+
+    /* Box shake animation */
+    .box-shake {
+      animation: shakeBox 0.5s ease-in-out;
+    }
+    @keyframes shakeBox {
+      0%,100% { transform: translateX(0) rotate(0deg); }
+      15%      { transform: translateX(-8px) rotate(-3deg); }
+      30%      { transform: translateX(8px) rotate(3deg); }
+      45%      { transform: translateX(-6px) rotate(-2deg); }
+      60%      { transform: translateX(6px) rotate(2deg); }
+      75%      { transform: translateX(-4px) rotate(-1deg); }
+    }
+    .lid-open {
+      transform: rotateX(-80deg) translateY(-20px) !important;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="nightSky"></canvas>
+  <div class="dark-magic"></div>
+  <div class="floating-hearts-container" id="floatingHearts"></div>
+
+  <div class="music-player">
+    <button id="musicToggle">▶</button>
+    <span id="musicLabel" class="music-note-anim">Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="audio/background-music.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <nav class="nav-progress" aria-label="Page navigation">
+    <a href="index.html" title="Cover"></a>
+    <a href="childhood.html" title="Childhood"></a>
+    <a href="present.html" title="Present"></a>
+    <a href="story.html" title="Our Story"></a>
+    <a href="dreamworld.html" title="Dream World"></a>
+    <a href="giftbox.html" class="active" title="Gift Box"></a>
+    <a href="letter.html" title="Letter"></a>
+    <a href="reasons.html" title="Reasons"></a>
+    <a href="future.html" title="Future"></a>
+    <a href="secretheart.html" title="Secret Heart"></a>
+    <a href="cake.html" title="Cake"></a>
+    <a href="final.html" title="Final"></a>
+  </nav>
+
+  <main class="gift-scene">
+    <p style="font-family:var(--ff-body);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:20px" data-reveal>
+      ✦ Chapter 5 — Your surprise ✦
+    </p>
+
+    <!-- PRE-CLICK STATE -->
+    <div id="preclickState">
+      <h2 class="heading-script" data-reveal style="margin-bottom:8px">A Gift Just For You</h2>
+      <p class="gift-hint" data-reveal>"Open only if you're ready for a surprise ❤️"</p>
+
+      <div class="gift-stage" data-reveal>
+        <div class="gift-box-wrap" id="giftBoxWrap" onclick="openGiftBox()" aria-label="Open gift box">
+          <div class="gift-box-lid" id="giftLid">
+            <span class="gift-bow">🎀</span>
+          </div>
+          <div class="gift-box-body" id="giftBody"></div>
+        </div>
+        <div class="gift-glow-ring"></div>
+      </div>
+
+      <p style="font-family:var(--ff-body);font-size:0.8rem;color:rgba(255,255,255,0.35);margin-top:12px;letter-spacing:0.05em" data-reveal>
+        ↑ Tap the gift box ↑
+      </p>
+    </div>
+
+    <!-- POST-CLICK REVEAL -->
+    <div class="gift-reveal" id="giftReveal">
+      <h2 class="heading-script" style="color:var(--gold-soft)">Ta-da! 🎁✨</h2>
+
+      <!-- Girl photo from gift box -->
+      <!-- Replace kavuu.jpg with your photo or Ghibli version of your photo -->
+      <div class="girl-photo-ring">
+        <div class="girl-photo-inner">
+          <!-- <img src="images/kavuu.jpg" alt="Kavuu" /> -->
+          <!-- Replace with my photo or Ghibli version of my photo -->
+          <img src="images/kavuu.jpeg" alt="Kavuu" />
+        </div>
+      </div>
+
+      <!-- Speech bubbles from the girl -->
+      <div class="speech-sequence" id="speechSeq">
+        <div class="speech-bubble bold" id="sp0">Happy Birthday My Love mudduuu❤️</div>
+        <div class="speech-bubble" id="sp1">I couldn't be there today😌...</div>
+        <div class="speech-bubble" id="sp2">So I sent a tiny version of myself🫠🫂</div>
+        <div class="speech-bubble" id="sp3">And guess what🤔😁???</div>
+        <div class="speech-bubble bold" id="sp4">I am your gift🎁🫣😘</div>
+        <div class="speech-bubble" id="sp5">Your lifelong headache🤭❤️😂 But the...</div>
+        <div class="speech-bubble bold" id="sp6">"headache you'll never be able to get rid of😘💋"</div>
+      </div>
+
+      <!-- Glowing heart given to him -->
+      <div class="glowing-heart-give" id="glowingHeart">❤️</div>
+
+      <a href="letter.html" class="btn-romantic" id="acceptBtn" style="opacity:0;transition:opacity 1s ease">
+        <span>Accept My Heart ❤️</span>
+      </a>
+    </div>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script>
+    function openGiftBox() {
+      const wrap = document.getElementById('giftBoxWrap');
+      const lid  = document.getElementById('giftLid');
+
+      // Shake
+      wrap.classList.add('box-shake');
+      setTimeout(() => {
+        wrap.classList.remove('box-shake');
+        // Open lid
+        lid.classList.add('lid-open');
+        launchConfetti(3000);
+
+        setTimeout(() => {
+          document.getElementById('preclickState').style.display = 'none';
+          document.getElementById('giftReveal').classList.add('show');
+
+          // Sequence speech bubbles
+          const bubbles = ['sp0','sp1','sp2','sp3','sp4','sp5','sp6'];
+          bubbles.forEach((id, i) => {
+            setTimeout(() => {
+              document.getElementById(id).classList.add('visible');
+            }, i * 900);
+          });
+
+          // Glowing heart
+          setTimeout(() => {
+            document.getElementById('glowingHeart').classList.add('visible');
+          }, bubbles.length * 900 + 200);
+
+          // Accept button
+          setTimeout(() => {
+            document.getElementById('acceptBtn').style.opacity = '1';
+          }, bubbles.length * 900 + 1200);
+        }, 800);
+      }, 600);
+    }
+  </script>
+</body>
+</html>

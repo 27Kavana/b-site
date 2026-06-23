@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Forever Yours ❤️ — Birthday Website</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .final-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 24px 80px;
+      text-align: center;
+    }
+
+    .nebula-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(255,107,157,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(124,58,237,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(249,199,79,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Message cards — fade-in sequence ── */
+    .final-card {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 1s ease, transform 1s ease;
+      max-width: 560px;
+      width: 100%;
+    }
+    .final-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Distance line */
+    .distance-line {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 28px 0 24px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .dist-chip {
+      font-family: var(--ff-body);
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      padding: 8px 18px;
+      border-radius: 50px;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.6);
+    }
+    .dist-arrow {
+      font-size: 1.4rem;
+      color: var(--pink);
+      filter: drop-shadow(0 0 8px rgba(255,107,157,0.7));
+    }
+
+    /* Core quotes */
+    .quote-block {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px;
+      padding: 32px 28px;
+      margin: 12px 0;
+      text-align: center;
+    }
+    .quote-big {
+      font-family: var(--ff-display);
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffd700, #ff6b9d, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+    .quote-sub {
+      font-family: var(--ff-serif);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.8;
+    }
+
+    /* Thank you section */
+    .thankyou-block {
+      background: linear-gradient(160deg, rgba(255,107,157,0.12), rgba(124,58,237,0.12));
+      border: 1px solid rgba(255,107,157,0.2);
+      border-radius: 24px;
+      padding: 28px 24px;
+      margin: 12px 0;
+    }
+    .thankyou-line {
+      font-family: var(--ff-serif);
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.82);
+      line-height: 2;
+    }
+    .thankyou-line.highlight {
+      color: var(--gold-soft);
+      font-size: clamp(1.05rem, 2.8vw, 1.25rem);
+    }
+
+    /* Forever sign */
+    .forever-block {
+      padding: 28px 0 8px;
+    }
+    .forever-title {
+      font-family: var(--ff-script);
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      color: var(--pink);
+      filter: drop-shadow(0 0 16px rgba(255,107,157,0.6));
+      margin-bottom: 6px;
+    }
+    .forever-name {
+      font-family: var(--ff-display);
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffd700, #ff6b9d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .forever-heart {
+      font-size: 3.5rem;
+      display: block;
+      margin: 16px 0;
+      animation: foreverHeartPulse 1.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255,107,157,0.9));
+    }
+    @keyframes foreverHeartPulse {
+      0%,100% { transform: scale(1); }
+      50%      { transform: scale(1.22); }
+    }
+
+    /* Stars cascade */
+    .star-cascade {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .falling-star {
+      position: absolute;
+      font-size: 1rem;
+      animation: starCascade linear infinite;
+    }
+    @keyframes starCascade {
+      0%   { opacity: 0; transform: translateY(-20px); }
+      10%  { opacity: 0.8; }
+      90%  { opacity: 0.6; }
+      100% { opacity: 0; transform: translateY(110vh); }
+    }
+
+    /* Restart button */
+    #restartBtn {
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    #restartBtn.show { opacity: 1; }
+
+    /* Infinity symbol animation */
+    .infinity-symbol {
+      font-size: 2rem;
+      display: inline-block;
+      animation: infinitySpin 4s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(249,199,79,0.6));
+    }
+    @keyframes infinitySpin {
+      0%,100% { transform: scale(1) rotate(0deg); }
+      50%      { transform: scale(1.2) rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="nightSky"></canvas>
+  <div class="nebula-bg"></div>
+  <div class="floating-hearts-container" id="floatingHearts"></div>
+  <div class="moon"></div>
+
+  <!-- Star cascade decoration -->
+  <div class="star-cascade" id="starCascade"></div>
+
+  <div class="music-player">
+    <button id="musicToggle">▶</button>
+    <span id="musicLabel" class="music-note-anim">Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="audio/background-music.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <nav class="nav-progress" aria-label="Page navigation">
+    <a href="index.html" title="Cover"></a>
+    <a href="childhood.html" title="Childhood"></a>
+    <a href="present.html" title="Present"></a>
+    <a href="story.html" title="Our Story"></a>
+    <a href="dreamworld.html" title="Dream World"></a>
+    <a href="giftbox.html" title="Gift Box"></a>
+    <a href="letter.html" title="Letter"></a>
+    <a href="reasons.html" title="Reasons"></a>
+    <a href="future.html" title="Future"></a>
+    <a href="secretheart.html" title="Secret Heart"></a>
+    <a href="cake.html" title="Cake"></a>
+    <a href="final.html" class="active" title="Final"></a>
+  </nav>
+
+  <main class="final-scene">
+
+    <!-- Block 1: Distance vs Love -->
+    <div class="final-card" id="fc1">
+      <div class="distance-line">
+        <div class="dist-chip">Distance 🌍</div>
+        <div class="dist-arrow">→ ❤️ →</div>
+        <div class="dist-chip">Love 💕</div>
+      </div>
+      <p style="font-family:var(--ff-body);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:20px">
+        ✦ The final chapter ✦
+      </p>
+      <div class="quote-block">
+        <div class="quote-big">Distance kept us apart...</div>
+        <div class="quote-sub">"But love brought us together❤️" </div>
+      </div>
+    </div>
+
+    <!-- Block 2: Birthday wish -->
+    <div class="final-card" id="fc2" style="margin-top:16px">
+      <h2 class="heading-glow" style="font-size:clamp(2rem,7vw,4.5rem);margin:8px 0">
+        Happy 20th Birthday once again myy mudduuu🫂
+      </h2>
+      <p class="text-romantic" style="max-width:480px;margin:12px auto">
+        Always keep smiling😁...and rockinggg🤩✨💫
+      </p>
+      <p class="text-romantic" style="max-width:480px;margin:12px auto">
+        You are my favorite hello and my hardest goodbye..
+      </p>
+      <p class="text-romantic" style="max-width:460px;margin:8px auto;color:rgba(255,255,255,0.7)">
+        "I love you today, tomorrow, and every day after that♾️💓"
+      </p>
+    </div>
+
+    <!-- Block 3: Thank you -->
+    <div class="final-card" id="fc3" style="margin-top:16px">
+      <div class="thankyou-block">
+        <p class="thankyou-line highlight">Thank you for coming into my life❤️😘🤗</p>
+        <p class="thankyou-line">Thank you for that random 'Hi'😊</p>
+        <p class="thankyou-line highlight">It was the best unexpected message I ever received 🥺❤️</p>
+      </div>
+    </div>
+
+    <!-- Block 4: Forever -->
+    <div class="final-card" id="fc4" style="margin-top:20px">
+      <div class="forever-block">
+        <div class="forever-title">Forever yours,</div>
+        <div class="forever-name">Mudduu Kavuu❤️😘</div>
+        <span class="forever-heart">❤️</span>
+        <div style="display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap">
+          <span class="infinity-symbol">♾️</span>
+          <span class="text-romantic" style="font-size:1.1rem;color:rgba(255,255,255,0.7)">Love without end</span>
+          <span class="infinity-symbol">♾️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Block 5: Restart -->
+    <div class="final-card" id="fc5" style="margin-top:28px">
+      <div class="romantic-divider" style="justify-content:center">
+        <span>✨</span>
+      </div>
+      <p class="text-caption" style="margin:16px 0 24px">~ The End & The Beginning ~</p>
+      <a href="index.html" class="btn-romantic" id="restartBtn">
+        <span>Restart The Journey ❤️</span>
+      </a>
+    </div>
+
+  </main>
+
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sequence the final cards
+      const cards = ['fc1','fc2','fc3','fc4','fc5'];
+      cards.forEach((id, i) => {
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('visible');
+          if (id === 'fc5') {
+            document.getElementById('restartBtn').classList.add('show');
+            launchConfetti(4000);
+          }
+        }, i * 1200 + 400);
+      });
+
+      // Star cascade
+      const cascade = document.getElementById('starCascade');
+      const starEmojis = ['⭐','✨','💫','🌟','⭐','✨'];
+      function spawnCascadeStar() {
+        const el = document.createElement('div');
+        el.className = 'falling-star';
+        el.textContent = starEmojis[Math.floor(Math.random() * starEmojis.length)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.top = '-20px';
+        el.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        el.style.animationDuration = (Math.random() * 5 + 6) + 's';
+        el.style.animationDelay = Math.random() * 2 + 's';
+        cascade.appendChild(el);
+        setTimeout(() => el.remove(), 12000);
+      }
+      for (let i = 0; i < 15; i++) setTimeout(spawnCascadeStar, i * 500);
+      setInterval(spawnCascadeStar, 1200);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cut The Cake 🎂 — Birthday Website</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .cake-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 24px 80px;
+      text-align: center;
+    }
+
+    .nebula-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 30% 70%, rgba(255,107,157,0.15) 0%, transparent 55%),
+        radial-gradient(ellipse at 70% 30%, rgba(249,199,79,0.1) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(124,58,237,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Birthday Cake ── */
+    .cake-wrap {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 28px 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* Plate */
+    .cake-plate {
+      width: 220px;
+      height: 18px;
+      background: linear-gradient(180deg, #d4a0c8, #b07090);
+      border-radius: 50%;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      margin-top: -8px;
+      z-index: 1;
+    }
+
+    /* Bottom tier */
+    .cake-tier-bottom {
+      width: 200px;
+      height: 70px;
+      background: linear-gradient(160deg, #ff9ec4, #e6698f, #c44569);
+      border-radius: 12px 12px 0 0;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(196,69,105,0.4);
+      overflow: hidden;
+    }
+    .cake-tier-bottom::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 16px;
+      background: linear-gradient(90deg, #ffd700, #ffec80, #ffd700, #ffec80, #ffd700);
+      background-size: 40px 100%;
+    }
+    .cake-tier-bottom::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 16px;
+      background: linear-gradient(90deg, #ffd700, #ffec80, #ffd700, #ffec80, #ffd700);
+      background-size: 40px 100%;
+    }
+
+    /* Middle tier */
+    .cake-tier-mid {
+      width: 160px;
+      height: 60px;
+      background: linear-gradient(160deg, #c084fc, #9d4edd, #7c3aed);
+      border-radius: 8px 8px 0 0;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(124,58,237,0.4);
+      overflow: hidden;
+    }
+    .cake-tier-mid::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 12px;
+      background: linear-gradient(90deg, #ffd700, #ffec80, #ffd700, #ffec80);
+      background-size: 32px 100%;
+    }
+
+    /* Top tier */
+    .cake-tier-top {
+      width: 110px;
+      height: 50px;
+      background: linear-gradient(160deg, #f9c74f, #f4a261, #e76f51);
+      border-radius: 6px 6px 0 0;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(244,162,97,0.4);
+      overflow: hidden;
+    }
+    .cake-tier-top::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 10px;
+      background: linear-gradient(90deg, #ffd700, #ffec80, #ffd700);
+      background-size: 24px 100%;
+    }
+
+    /* Candles */
+    .candles-row {
+      display: flex;
+      gap: 14px;
+      margin-bottom: -2px;
+      position: relative;
+      z-index: 5;
+    }
+    .candle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .candle-flame {
+      font-size: 1.4rem;
+      animation: flameFlicker 0.4s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 6px rgba(255,200,0,0.9));
+    }
+    @keyframes flameFlicker {
+      0%   { transform: scale(1) rotate(-3deg); }
+      100% { transform: scale(1.15) rotate(3deg); }
+    }
+    .candle-body {
+      width: 10px;
+      height: 30px;
+      border-radius: 4px 4px 2px 2px;
+    }
+    .candle:nth-child(1) .candle-body { background: linear-gradient(180deg, #ff6b9d, #c44569); }
+    .candle:nth-child(2) .candle-body { background: linear-gradient(180deg, #c084fc, #7c3aed); }
+    .candle:nth-child(3) .candle-body { background: linear-gradient(180deg, #ffd700, #f4a261); }
+    .candle:nth-child(4) .candle-body { background: linear-gradient(180deg, #60a5fa, #3b82f6); }
+    .candle:nth-child(5) .candle-body { background: linear-gradient(180deg, #4ade80, #16a34a); }
+
+    /* Decorative dots on cake */
+    .cake-dots {
+      position: absolute;
+      inset: 20px 10px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-content: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+    .cake-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+    }
+
+    /* Cake glow */
+    .cake-glow-base {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 250px; height: 30px;
+      background: radial-gradient(ellipse, rgba(255,107,157,0.4) 0%, transparent 70%);
+      filter: blur(10px);
+      animation: glowBase 2s ease-in-out infinite;
+    }
+    @keyframes glowBase {
+      0%,100% { opacity: 0.5; transform: translateX(-50%) scaleX(1); }
+      50%      { opacity: 1;   transform: translateX(-50%) scaleX(1.15); }
+    }
+
+    /* Hover effect on cake */
+    .cake-wrap:hover .cake-tier-bottom,
+    .cake-wrap:hover .cake-tier-mid,
+    .cake-wrap:hover .cake-tier-top {
+      filter: brightness(1.1);
+    }
+
+    /* ── Fireworks ── */
+    .firework {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9990;
+      font-size: 2rem;
+      animation: fireworkBurst 1s ease forwards;
+    }
+    @keyframes fireworkBurst {
+      0%   { opacity: 1; transform: scale(0.2); }
+      50%  { opacity: 1; transform: scale(1.4); }
+      100% { opacity: 0; transform: scale(0.8); }
+    }
+
+    /* ── Celebration message ── */
+    .celebration-msg {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      max-width: 540px;
+      width: 100%;
+    }
+    .celebration-msg.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .celebration-text {
+      font-family: var(--ff-script);
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      color: var(--gold-soft);
+      text-shadow: 0 0 20px rgba(249,199,79,0.5);
+      line-height: 1.5;
+    }
+
+    /* Number "20" display */
+    .big-20 {
+      font-family: var(--ff-display);
+      font-size: clamp(3rem, 12vw, 8rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffd700 0%, #ff6b9d 40%, #c084fc 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 30px rgba(249,199,79,0.4));
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    /* Tap hint */
+    .tap-hint {
+      font-family: var(--ff-body);
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      margin-top: 8px;
+      animation: tapHintPulse 2s ease-in-out infinite;
+    }
+    @keyframes tapHintPulse {
+      0%,100% { opacity: 0.4; }
+      50%      { opacity: 0.8; }
+    }
+
+    /* Final message link */
+    #finalMsgBtn {
+      opacity: 0;
+      transition: opacity 1s ease;
+      margin-top: 24px;
+    }
+    #finalMsgBtn.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <canvas id="nightSky"></canvas>
+  <div class="nebula-bg"></div>
+  <div class="floating-hearts-container" id="floatingHearts"></div>
+  <div class="moon"></div>
+
+  <div class="music-player">
+    <button id="musicToggle">▶</button>
+    <span id="musicLabel" class="music-note-anim">Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="audio/background-music.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <nav class="nav-progress" aria-label="Page navigation">
+    <a href="index.html" title="Cover"></a>
+    <a href="childhood.html" title="Childhood"></a>
+    <a href="present.html" title="Present"></a>
+    <a href="story.html" title="Our Story"></a>
+    <a href="dreamworld.html" title="Dream World"></a>
+    <a href="giftbox.html" title="Gift Box"></a>
+    <a href="letter.html" title="Letter"></a>
+    <a href="reasons.html" title="Reasons"></a>
+    <a href="future.html" title="Future"></a>
+    <a href="secretheart.html" title="Secret Heart"></a>
+    <a href="cake.html" class="active" title="Cake"></a>
+    <a href="final.html" title="Final"></a>
+  </nav>
+
+  <main class="cake-scene">
+    <p style="font-family:var(--ff-body);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:16px" data-reveal>
+      ✦ Chapter 10 — Make a wish ✦
+    </p>
+
+    <div class="big-20" data-reveal>20</div>
+    <h2 class="heading-script" data-reveal style="margin-bottom:4px">Happy Birthday!</h2>
+    <p class="text-romantic" data-reveal style="margin-bottom:24px;max-width:420px">
+      This is your special day — make it magical 🎂✨
+    </p>
+
+    <!-- CAKE -->
+    <div class="cake-wrap" id="cakeWrap" onclick="cutCake()" data-reveal>
+      <!-- Candles -->
+      <div class="candles-row">
+        <div class="candle">
+          <div class="candle-flame" id="flame1">🔥</div>
+          <div class="candle-body"></div>
+        </div>
+        <div class="candle">
+          <div class="candle-flame" id="flame2">🔥</div>
+          <div class="candle-body"></div>
+        </div>
+        <div class="candle">
+          <div class="candle-flame" id="flame3">🔥</div>
+          <div class="candle-body"></div>
+        </div>
+        <div class="candle">
+          <div class="candle-flame" id="flame4">🔥</div>
+          <div class="candle-body"></div>
+        </div>
+        <div class="candle">
+          <div class="candle-flame" id="flame5">🔥</div>
+          <div class="candle-body"></div>
+        </div>
+      </div>
+
+      <!-- Top tier -->
+      <div class="cake-tier-top">
+        <div class="cake-dots">
+          <div class="cake-dot"></div><div class="cake-dot"></div><div class="cake-dot"></div>
+        </div>
+      </div>
+
+      <!-- Mid tier -->
+      <div class="cake-tier-mid">
+        <div class="cake-dots">
+          <div class="cake-dot"></div><div class="cake-dot"></div><div class="cake-dot"></div><div class="cake-dot"></div>
+        </div>
+      </div>
+
+      <!-- Bottom tier -->
+      <div class="cake-tier-bottom">
+        <div class="cake-dots">
+          <div class="cake-dot"></div><div class="cake-dot"></div>
+          <div class="cake-dot"></div><div class="cake-dot"></div>
+          <div class="cake-dot"></div><div class="cake-dot"></div>
+        </div>
+      </div>
+
+      <!-- Plate -->
+      <div class="cake-plate"></div>
+
+      <!-- Glow -->
+      <div class="cake-glow-base"></div>
+    </div>
+
+    <p class="tap-hint" id="tapHint" data-reveal>✦ Tap the cake to cut it ✦</p>
+
+    <!-- CELEBRATION (hidden until cut) -->
+    <div class="celebration-msg" id="celebMsg">
+      <p class="celebration-text">🎉 Happy 20th Birthday darlingg! 🎉</p>
+      <p class="text-romantic" style="margin-top:16px;font-size:clamp(0.95rem,2.5vw,1.1rem)">
+        "May every year be more beautiful than the last🫂😘🫶" 
+      </p>
+    </div>
+
+    <a href="final.html" class="btn-romantic" id="finalMsgBtn">
+      <span>Final Message ❤️</span>
+    </a>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script>
+    let cakeCut = false;
+
+    function cutCake() {
+      if (cakeCut) return;
+      cakeCut = true;
+
+      const cake = document.getElementById('cakeWrap');
+      document.getElementById('tapHint').style.display = 'none';
+
+      // Shake cake
+      cake.style.animation = 'shakeEl 0.5s ease';
+      setTimeout(() => {
+        cake.style.animation = '';
+
+        // Blow candles
+        ['flame1','flame2','flame3','flame4','flame5'].forEach((id, i) => {
+          setTimeout(() => {
+            const el = document.getElementById(id);
+            if (el) {
+              el.style.transition = 'opacity 0.3s';
+              el.style.opacity = '0';
+              el.style.transform = 'scale(2)';
+            }
+          }, i * 120);
+        });
+
+        // Fireworks
+        setTimeout(() => {
+          launchConfetti(6000);
+          spawnFireworks();
+
+          document.getElementById('celebMsg').classList.add('show');
+          setTimeout(() => {
+            const btn = document.getElementById('finalMsgBtn');
+            btn.classList.add('show');
+          }, 1800);
+        }, 700);
+      }, 500);
+    }
+
+    function spawnFireworks() {
+      const fireworkEmojis = ['🎆','🎇','✨','💥','🌟','⭐','💫'];
+      for (let i = 0; i < 18; i++) {
+        setTimeout(() => {
+          const el = document.createElement('div');
+          el.className = 'firework';
+          el.textContent = fireworkEmojis[Math.floor(Math.random() * fireworkEmojis.length)];
+          el.style.top  = Math.random() * 80 + 5 + 'vh';
+          el.style.left = Math.random() * 90 + 5 + 'vw';
+          el.style.fontSize = (Math.random() * 24 + 16) + 'px';
+          el.style.animationDuration = (Math.random() * 0.6 + 0.7) + 's';
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 1500);
+        }, i * 200);
+      }
+    }
+
+    // CSS shake keyframe added inline
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+      @keyframes shakeEl {
+        0%,100% { transform: translateX(0) rotate(0deg); }
+        20% { transform: translateX(-8px) rotate(-4deg); }
+        40% { transform: translateX(8px) rotate(4deg); }
+        60% { transform: translateX(-5px) rotate(-2deg); }
+        80% { transform: translateX(5px) rotate(2deg); }
+      }
+    `;
+    document.head.appendChild(styleEl);
+  </script>
+</body>
+</html>

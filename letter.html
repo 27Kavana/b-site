@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Letter For You ❤️ — Birthday Website</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .letter-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 90px 24px 80px;
+      text-align: center;
+    }
+
+    .nebula-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(255,107,157,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(249,199,79,0.08) 0%, transparent 55%);
+      pointer-events: none;
+    }
+
+    /* ── Envelope intro ── */
+    .envelope-wrap {
+      margin: 20px 0 32px;
+      font-size: 4rem;
+      animation: envelopeFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255,107,157,0.5));
+    }
+    @keyframes envelopeFloat {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-14px) rotate(3deg); }
+    }
+
+    /* ── Letter Paper ── */
+    .letter-paper {
+      position: relative;
+      background: linear-gradient(160deg, #fff8f5 0%, #fff0f8 50%, #f8f0ff 100%);
+      border-radius: 16px;
+      padding: clamp(24px, 5vw, 48px) clamp(24px, 6vw, 56px);
+      max-width: 680px;
+      width: 100%;
+      margin: 0 auto 36px;
+      box-shadow:
+        0 0 0 1px rgba(255,107,157,0.15),
+        0 8px 40px rgba(0,0,0,0.4),
+        0 0 80px rgba(255,107,157,0.12);
+      text-align: left;
+    }
+
+    /* Ruled lines effect */
+    .letter-paper::before {
+      content: '';
+      position: absolute;
+      inset: 60px 0 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent,
+        transparent 34px,
+        rgba(255,107,157,0.08) 34px,
+        rgba(255,107,157,0.08) 35px
+      );
+      border-radius: 0 0 16px 16px;
+      pointer-events: none;
+    }
+
+    /* Left margin */
+    .letter-paper::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; left: 48px;
+      width: 1px;
+      background: rgba(255,107,157,0.15);
+      border-radius: 99px;
+    }
+
+    .letter-heading {
+      font-family: var(--ff-script);
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      color: #c44569;
+      margin-bottom: 24px;
+      display: block;
+      text-align: center;
+    }
+
+    .letter-body {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      line-height: 2.18;
+      color: #3d1a2c;
+    }
+
+    .letter-para {
+      margin-bottom: 22px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .letter-para.visible { opacity: 1; transform: translateY(0); }
+
+    .letter-sign {
+      font-family: var(--ff-script);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: #c44569;
+      margin-top: 28px;
+      text-align: right;
+      display: block;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .letter-sign.visible { opacity: 1; }
+
+    /* Wax seal */
+    .wax-seal {
+      position: absolute;
+      bottom: -22px;
+      right: 32px;
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #ff6b9d, #c44569);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      box-shadow: 0 4px 20px rgba(196,69,105,0.5);
+      border: 3px solid rgba(255,255,255,0.3);
+    }
+
+    /* Decorative hearts on paper */
+    .paper-deco {
+      position: absolute;
+      opacity: 0.12;
+      font-size: 1.2rem;
+      color: #ff6b9d;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="nightSky"></canvas>
+  <div class="nebula-bg"></div>
+  <div class="floating-hearts-container" id="floatingHearts"></div>
+  <div class="moon"></div>
+
+  <div class="music-player">
+    <button id="musicToggle">▶</button>
+    <span id="musicLabel" class="music-note-anim">Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="audio/background-music.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <nav class="nav-progress" aria-label="Page navigation">
+    <a href="index.html" title="Cover"></a>
+    <a href="childhood.html" title="Childhood"></a>
+    <a href="present.html" title="Present"></a>
+    <a href="story.html" title="Our Story"></a>
+    <a href="dreamworld.html" title="Dream World"></a>
+    <a href="giftbox.html" title="Gift Box"></a>
+    <a href="letter.html" class="active" title="Letter"></a>
+    <a href="reasons.html" title="Reasons"></a>
+    <a href="future.html" title="Future"></a>
+    <a href="secretheart.html" title="Secret Heart"></a>
+    <a href="cake.html" title="Cake"></a>
+    <a href="final.html" title="Final"></a>
+  </nav>
+
+  <main class="letter-scene">
+    <p style="font-family:var(--ff-body);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:20px" data-reveal>
+      ✦ Chapter 6 — Words from my heart ✦
+    </p>
+
+    <div class="envelope-wrap" data-reveal>💌</div>
+
+    <h2 class="heading-script" data-reveal style="margin-bottom:28px">A Letter From Me To You</h2>
+
+    <!-- THE LETTER -->
+    <div class="letter-paper" id="letterPaper" data-reveal>
+      <!-- Decorative elements -->
+      <span class="paper-deco" style="top:20px;left:60px">❤️</span>
+      <span class="paper-deco" style="top:20px;right:20px">🌸</span>
+      <span class="paper-deco" style="bottom:60px;left:60px">✨</span>
+
+      <span class="letter-heading">Happy Birthday🥳🎂...My Love mudduuu😘</span>
+
+      <div class="letter-body">
+        <p class="letter-para" id="lp0">
+          24 June is a special day because it's the day you came into this world. And even though I didn't know you back then, today I'm incredibly grateful that you were born😁😻.
+        </p>
+        <p class="letter-para" id="lp1">
+          Who would have thought that a random "Hi" on Instagram would change so much? On 12 May, you were just a stranger. Today, you're someone I think about every day, someone who makes me smile🤩😁, someone who means so much to me💓😘.
+        </p>
+        <p class="letter-para" id="lp2">
+          We may be far apart, and we may not have met in person yet, but you've become one of the most important parts of my life🥺😍. Distance has taught me that love isn't about being beside someone every moment; it's about carrying them in your heart wherever you go☺️💫💗.
+        </p>
+        <p class="letter-para" id="lp3">
+          Thank you for your care, your patience, your time, your jokes, your support, and for making ordinary days feel special😊❤️. Thank you for listening to me, understanding me, and staying with me through every mood and every conversation🤗😘.
+        </p>
+        <p class="letter-para" id="lp4">
+          On your 20th birthday, I want you to know that you are loved more than you realize. I hope this year brings you happiness, success, good health, and all the beautiful things you deserve💫🥰.
+        </p>
+        <p class="letter-para" id="lp5">
+          I wish I could be there to celebrate with you today🥺. I wish I could see your smile, hand you a gift, and wish you in person❤️😍. Until that day comes, please accept this little website as a piece of my heart made especially for you😘💋.
+        </p>
+        <p class="letter-para" id="lp6">
+          Maybe we haven't met yet, maybe we don't have photos together yet, but that doesn't change how special you are to me. One day we'll look back at these days, smile, and remember how our story began with a simple "Hi."😁😁❤️🥰
+        </p>
+        <p class="letter-para" id="lp7">
+          Until then, keep a little space for me in your heart, just like I keep a big space for you in mine💫✨🤗🥰.
+        </p>
+        <p class="letter-para" id="lp8" style="font-weight:600;color:#a0295a">
+          Happy 20th Birthday, Handsome ❤️...love you moreee mudduu 💓😍🤗
+        </p>
+        <p class="letter-para" id="lp9" style="font-weight:600;color:#a0295a">
+          I love you today, tomorrow, and forever ♾️🥰❤️
+        </p>
+
+        <span class="letter-sign" id="letterSign">
+          With all my love,<br/>
+          Urrr mudduu kavuu 😘❤️
+        </span>
+      </div>
+
+      <!-- Wax seal -->
+      <div class="wax-seal">❤️</div>
+    </div>
+
+    <a href="reasons.html" class="btn-romantic" id="reasonsBtn" style="opacity:0;transition:opacity 1s ease;margin-top:24px">
+      <span>20 Reasons I Love You ❤️</span>
+    </a>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const paras = ['lp0','lp1','lp2','lp3','lp4','lp5','lp6','lp7','lp8','lp9'];
+      let started = false;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting && !started) {
+            started = true;
+            paras.forEach((id, i) => {
+              setTimeout(() => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('visible');
+              }, i * 500 + 300);
+            });
+            setTimeout(() => {
+              document.getElementById('letterSign').classList.add('visible');
+              document.getElementById('reasonsBtn').style.opacity = '1';
+            }, paras.length * 500 + 600);
+          }
+        });
+      }, { threshold: 0.2 });
+
+      const paper = document.getElementById('letterPaper');
+      if (paper) observer.observe(paper);
+    });
+  </script>
+</body>
+</html>

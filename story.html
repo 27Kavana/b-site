@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Story ❤️ — Birthday Website</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .story-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 24px 80px;
+      text-align: center;
+    }
+
+    /* ── Instagram DM UI ── */
+    .dm-phone {
+      background: #121212;
+      border-radius: 32px;
+      border: 2px solid rgba(255,255,255,0.12);
+      box-shadow: 0 0 60px rgba(255,107,157,0.2), 0 20px 60px rgba(0,0,0,0.6);
+      width: min(360px, 90vw);
+      overflow: hidden;
+      margin: 28px 0;
+      flex-shrink: 0;
+    }
+    .dm-topbar {
+      background: linear-gradient(90deg, #1a1a2e, #16213e);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .dm-avatar {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .dm-name {
+      font-family: var(--ff-body);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: white;
+    }
+    .dm-status {
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.45);
+    }
+    .dm-date-pill {
+      text-align: center;
+      padding: 16px 0 8px;
+    }
+    .dm-date-pill span {
+      background: rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.68rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.05em;
+    }
+    .dm-messages {
+      padding: 8px 14px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 200px;
+    }
+    .dm-msg {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .dm-msg.him { justify-content: flex-start; }
+    .dm-msg.me  { justify-content: flex-end; }
+    .dm-msg.visible { opacity: 1; transform: translateY(0); }
+
+    .dm-bubble {
+      max-width: 70%;
+      padding: 10px 14px;
+      border-radius: 20px;
+      font-family: var(--ff-body);
+      font-size: 0.92rem;
+      line-height: 1.4;
+    }
+    .dm-msg.him .dm-bubble {
+      background: #2a2a2a;
+      color: white;
+      border-bottom-left-radius: 4px;
+    }
+    .dm-msg.me .dm-bubble {
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .dm-mini-avatar {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f09433, #e6683c, #dc2743);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+    }
+    .typing-indicator {
+      display: flex; gap: 4px; align-items: center;
+      padding: 10px 14px;
+      background: #2a2a2a;
+      border-radius: 20px;
+      border-bottom-left-radius: 4px;
+      width: fit-content;
+    }
+    .typing-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      animation: typingBounce 1s ease-in-out infinite;
+    }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingBounce {
+      0%,60%,100% { transform: translateY(0); }
+      30%          { transform: translateY(-6px); }
+    }
+
+    /* ── Narration ── */
+    .narration-block {
+      max-width: 540px;
+      width: 100%;
+      margin: 8px 0 24px;
+    }
+    .narration-text {
+      font-family: var(--ff-serif);
+      font-size: clamp(1rem, 2.8vw, 1.25rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.8);
+      line-height: 1.9;
+    }
+    .narration-highlight {
+      color: var(--pink);
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      font-family: var(--ff-display);
+      font-weight: 600;
+      margin: 6px 0;
+      display: block;
+    }
+
+    /* ── Evolution pills ── */
+    .evolution-track {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 24px 0 32px;
+    }
+    .evo-pill {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-family: var(--ff-body);
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.5s ease;
+    }
+    .evo-pill.active {
+      background: linear-gradient(135deg, rgba(255,107,157,0.3), rgba(192,132,252,0.3));
+      border-color: rgba(255,107,157,0.4);
+      color: var(--pink);
+    }
+    .evo-pill.visible { opacity: 1; transform: scale(1); }
+    .evo-arrow {
+      color: rgba(255,255,255,0.3);
+      font-size: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .evo-arrow.visible { opacity: 1; }
+
+    .nebula-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 15% 70%, rgba(255,107,157,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 30%, rgba(124,58,237,0.14) 0%, transparent 55%);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="nightSky"></canvas>
+  <div class="nebula-bg"></div>
+  <div class="floating-hearts-container" id="floatingHearts"></div>
+  <div class="moon"></div>
+
+  <div class="music-player">
+    <button id="musicToggle">▶</button>
+    <span id="musicLabel" class="music-note-anim">Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="audio/background-music.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <nav class="nav-progress" aria-label="Page navigation">
+    <a href="index.html" title="Cover"></a>
+    <a href="childhood.html" title="Childhood"></a>
+    <a href="present.html" title="Present"></a>
+    <a href="story.html" class="active" title="Our Story"></a>
+    <a href="dreamworld.html" title="Dream World"></a>
+    <a href="giftbox.html" title="Gift Box"></a>
+    <a href="letter.html" title="Letter"></a>
+    <a href="reasons.html" title="Reasons"></a>
+    <a href="future.html" title="Future"></a>
+    <a href="secretheart.html" title="Secret Heart"></a>
+    <a href="cake.html" title="Cake"></a>
+    <a href="final.html" title="Final"></a>
+  </nav>
+
+  <main class="story-scene">
+    <p style="font-family:var(--ff-body);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:24px" data-reveal>
+      ✦ Chapter 3 — How it all started ✦
+    </p>
+
+    <h2 class="heading-script" data-reveal>Our Story</h2>
+    <p class="text-romantic" data-reveal style="margin:12px 0 28px;max-width:480px">
+      It started with the most ordinary message in the world…
+    </p>
+
+    <!-- Instagram DM Phone -->
+    <div class="dm-phone" data-reveal>
+      <div class="dm-topbar">
+        <div class="dm-avatar">📸</div>
+        <div>
+          <div class="dm-name">Instagram DM</div>
+          <div class="dm-status">📅 12 May 2026</div>
+        </div>
+      </div>
+
+      <div class="dm-date-pill">
+        <span>12 May 2026— The day everything changed😁</span>
+      </div>
+
+      <div class="dm-messages" id="dmMessages">
+        <!-- Messages injected by JS -->
+      </div>
+    </div>
+
+    <!-- Narration -->
+    <div class="narration-block" data-reveal id="narration1" style="opacity:0;transition:opacity 1s ease">
+      <p class="narration-text">"And that was supposed to be just another random Instagram message..."</p>
+      <p class="narration-text">"But somehow, it became my favorite conversation." ❤️</p>
+    </div>
+
+    <div class="narration-block" data-reveal id="narration2" style="opacity:0;transition:opacity 1s ease;margin-top:8px">
+      <p class="narration-text">Funny how I once asked...</p>
+      <span class="narration-highlight">'Who are you??🤨😂'</span>
+      <p class="narration-text" style="margin-top:8px">Because today...</p>
+      <span class="narration-highlight" style="color:var(--lavender)">"You're someone I never want to lose❤️🥹🫶" </span>
+    </div>
+
+    <!-- Evolution track -->
+    <div class="evolution-track" id="evoTrack">
+      <div class="evo-pill active" id="evo1">STRANGER</div>
+      <div class="evo-arrow" id="evArr1">❤️</div>
+      <div class="evo-pill" id="evo2">BEST FRIEND</div>
+      <div class="evo-arrow" id="evArr2">❤️</div>
+      <div class="evo-pill active" id="evo3">FAVORITE PERSON</div>
+    </div>
+
+    <a href="dreamworld.html" class="btn-romantic" id="continueBtn" style="opacity:0;transition:opacity 0.8s ease">
+      <span>Continue ❤️</span>
+    </a>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const messages = [
+        { side: 'him', text: 'Hi 😊',                   delay: 800 },
+        { side: 'me',  text: 'Who are you? 🤨😂',        delay: 2200 },
+        { side: 'him', text: 'Just wanted to talk 😄',   delay: 3800 },
+      ];
+
+      const container = document.getElementById('dmMessages');
+
+      // Show typing first
+      function showTyping(side) {
+        const wrap = document.createElement('div');
+        wrap.className = `dm-msg ${side}`;
+        if (side === 'him') {
+          const av = document.createElement('div');
+          av.className = 'dm-mini-avatar';
+          av.textContent = '👦';
+          wrap.appendChild(av);
+        }
+        const bub = document.createElement('div');
+        bub.className = 'typing-indicator';
+        bub.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+        wrap.appendChild(bub);
+        container.appendChild(wrap);
+        setTimeout(() => wrap.classList.add('visible'), 50);
+        return wrap;
+      }
+
+      function showMessage(msg, idx) {
+        return new Promise(resolve => {
+          const typingEl = showTyping(msg.side);
+          setTimeout(() => {
+            typingEl.remove();
+            const wrap = document.createElement('div');
+            wrap.className = `dm-msg ${msg.side}`;
+            if (msg.side === 'him') {
+              const av = document.createElement('div');
+              av.className = 'dm-mini-avatar';
+              av.textContent = '👦';
+              wrap.appendChild(av);
+            }
+            const bub = document.createElement('div');
+            bub.className = 'dm-bubble';
+            bub.textContent = msg.text;
+            wrap.appendChild(bub);
+            container.appendChild(wrap);
+            setTimeout(() => wrap.classList.add('visible'), 50);
+            resolve();
+          }, 1200);
+        });
+      }
+
+      async function runConversation() {
+        await new Promise(r => setTimeout(r, 600));
+        for (let i = 0; i < messages.length; i++) {
+          await new Promise(r => setTimeout(r, i === 0 ? 0 : 1000));
+          await showMessage(messages[i], i);
+        }
+        // Reveal narration + evolution
+        setTimeout(() => {
+          document.getElementById('narration1').style.opacity = '1';
+        }, 800);
+        setTimeout(() => {
+          document.getElementById('narration2').style.opacity = '1';
+        }, 2000);
+        setTimeout(() => {
+          ['evo1','evArr1','evo2','evArr2','evo3'].forEach((id, i) => {
+            setTimeout(() => {
+              const el = document.getElementById(id);
+              if (el) { el.classList.add('visible'); }
+            }, i * 300);
+          });
+          document.getElementById('evo2').classList.add('active');
+        }, 3400);
+        setTimeout(() => {
+          document.getElementById('continueBtn').style.opacity = '1';
+        }, 5000);
+      }
+
+      runConversation();
+    });
+  </script>
+</body>
+</html>

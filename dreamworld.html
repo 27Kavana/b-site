@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Dream World ❤️ — Birthday Website</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .dream-scene {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 90px 24px 80px;
+      text-align: center;
+    }
+
+    /* Dreamy gradient background */
+    .dream-nebula {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(167,139,250,0.2) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 20%, rgba(244,114,182,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── Slideshow ── */
+    .slideshow-wrap {
+      position: relative;
+      width: min(360px, 92vw);
+      height: min(420px, 80vw);
+      margin: 28px 0;
+      border-radius: 28px;
+      overflow: hidden;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      overflow: hidden;
+    }
+    .slide.active { opacity: 1; z-index: 2; }
+    .slide-bg {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+    }
+    /* Each slide has unique gradient / mood */
+    .slide-1 .slide-bg { background: linear-gradient(160deg, #1a0533 0%, #3d1460 40%, #c084fc 100%); }
+    .slide-2 .slide-bg { background: linear-gradient(160deg, #0a1628 0%, #1e3a5f 50%, #60a5fa 100%); }
+    .slide-3 .slide-bg { background: linear-gradient(160deg, #0f2027 0%, #203a43 50%, #2c5364 100%); }
+    .slide-4 .slide-bg { background: linear-gradient(160deg, #1a0012 0%, #4a0030 50%, #ff6b9d 100%); }
+    .slide-5 .slide-bg { background: linear-gradient(160deg, #0d0d1a 0%, #1a1a3e 50%, #7c3aed 100%); }
+    .slide-6 .slide-bg { background: linear-gradient(160deg, #1a0810 0%, #3d1428 50%, #e91e8c 100%); }
+    .slide-7 .slide-bg { background: linear-gradient(160deg, #0a1a0a 0%, #143d14 50%, #22c55e 100%); }
+    .slide-8 .slide-bg { background: linear-gradient(160deg, #1a1000 0%, #3d2800 50%, #fbbf24 100%); }
+
+    .slide-img {
+      position: relative;
+      z-index: 2;
+      font-size: 4.5rem;
+      filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+      animation: dreamFloat 4s ease-in-out infinite;
+    }
+    @keyframes dreamFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-12px) scale(1.05); }
+    }
+    /* Image placeholder — replace with actual AI-generated Ghibli images */
+    .slide-img-real {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 28px;
+      z-index: 1;
+      opacity: 0.85;
+    }
+
+    .slide-label {
+      position: relative;
+      z-index: 3;
+      font-family: var(--ff-script);
+      font-size: 1.3rem;
+      color: white;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    }
+    .slide-comment {
+      position: relative;
+      z-index: 3;
+      font-family: var(--ff-body);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+    }
+
+    /* Slide frame border */
+    .slideshow-border {
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      border: 2px solid rgba(255,255,255,0.15);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Dot indicators */
+    .slide-dots {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .slide-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .slide-dot.active {
+      background: var(--pink);
+      width: 20px;
+      border-radius: 3px;
+    }
+
+    /* Caption overlay */
+    .dream-captions {
+      max-width: 520px;
+      width: 100%;
+      margin: 12px 0 32px;
+    }
+    .dream-caption-line {
+      font-family: var(--ff-serif);
+      font-size: clamp(1rem, 2.8vw, 1.25rem);
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+      line-height: 2;
+    }
+    .dream-caption-line.gold {
+      color: var(--gold-soft);
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+    }
+
+    /* Ghibli forest particles */
+    .petal {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      animation: petalDrift linear infinite;
+      opacity: 0.6;
+    }
+    @keyframes petalDrift {
+      0%   { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.4; }
+      100% { transform: translateY(110vh) rotate(360deg) translateX(60px); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="nightSky"></canvas>
+  <div class="dream-nebula"></div>
+  <div class="floating-hearts-container" id="floatingHearts"></div>
+
+  <div class="music-player">
+    <button id="musicToggle">▶</button>
+    <span id="musicLabel" class="music-note-anim">Music</span>
+  </div>
+  <audio id="bgMusic" loop>
+    <source src="audio/background-music.mpeg" type="audio/mpeg" />
+  </audio>
+
+  <nav class="nav-progress" aria-label="Page navigation">
+    <a href="index.html" title="Cover"></a>
+    <a href="childhood.html" title="Childhood"></a>
+    <a href="present.html" title="Present"></a>
+    <a href="story.html" title="Our Story"></a>
+    <a href="dreamworld.html" class="active" title="Dream World"></a>
+    <a href="giftbox.html" title="Gift Box"></a>
+    <a href="letter.html" title="Letter"></a>
+    <a href="reasons.html" title="Reasons"></a>
+    <a href="future.html" title="Future"></a>
+    <a href="secretheart.html" title="Secret Heart"></a>
+    <a href="cake.html" title="Cake"></a>
+    <a href="final.html" title="Final"></a>
+  </nav>
+
+  <main class="dream-scene">
+    <p style="font-family:var(--ff-body);font-size:0.72rem;letter-spacing:0.3em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:16px" data-reveal>
+      ✦ Chapter 4 — Our dream world ✦
+    </p>
+    <h2 class="heading-script" data-reveal style="margin-bottom:6px">The World We'll Share</h2>
+    <p class="text-romantic" data-reveal style="margin-bottom:28px;max-width:480px">In every dream, it's always us ❤️</p>
+
+    <!-- SLIDESHOW -->
+    <!-- Replace each slide's emoji with an <img class="slide-img-real"> tag pointing to your AI-generated Ghibli images -->
+    <div class="slideshow-wrap" data-reveal id="slideshowWrap">
+      <div class="slideshow-border"></div>
+
+
+       <div class="slide slide-1" id="slide-0">
+        <div class="slide-bg"></div>
+        <img class="slide-img-real" src="images/dream5.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Our First Meeting</div>
+        
+      </div>
+
+      <!-- Slide 1: Cherry Blossom Walk -->
+      <!-- Replace with AI-generated Ghibli image: cherry blossom walk -->
+
+      <!-- Slide 2: Watching Stars -->
+      <!-- Replace with AI-generated Ghibli image: watching stars together -->
+      <div class="slide slide-2" id="slide-1">
+        <div class="slide-bg"></div>
+       <img class="slide-img-real" src="images/dream2.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Watching Stars Together</div>
+        
+      </div>
+
+      <!-- Slide 3: Peaceful Lake -->
+      <!-- Replace with AI-generated Ghibli image: peaceful lake scene -->
+      <div class="slide slide-3" id="slide-2">
+        <div class="slide-bg"></div>
+       <img class="slide-img-real" src="images/dream3.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Peaceful Lake</div>
+        
+      </div>
+
+      <!-- Slide 4: Fireworks -->
+      <!-- Replace with AI-generated Ghibli image: fireworks celebration -->
+      <div class="slide slide-4" id="slide-3">
+        <div class="slide-bg"></div>
+        <img class="slide-img-real" src="images/dream4.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Fireworks For Us</div>
+        
+      </div>
+
+      <div class="slide active slide-5" id="slide-4">
+        <div class="slide-bg"></div>
+       <img class="slide-img-real" src="images/dream1.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Cherry Blossom Walk</div>
+      </div>
+      <!-- Slide 6: Holding Hands -->
+      <!-- Replace with AI-generated Ghibli image: holding hands -->
+      <div class="slide slide-6" id="slide-5">
+        <div class="slide-bg"></div>
+        <img class="slide-img-real" src="images/dream6.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Holding Hands</div>
+        
+      </div>
+
+      <!-- Slide 7: Train Journey -->
+      <!-- Replace with AI-generated Ghibli image: train journey together -->
+      <div class="slide slide-7" id="slide-6">
+        <div class="slide-bg"></div>
+        <img class="slide-img-real" src="images/dream7.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Train Journey Together</div>
+        
+      </div>
+
+      <!-- Slide 8: Sunset Together -->
+      <!-- Replace with AI-generated Ghibli image: sunset together -->
+      <div class="slide slide-8" id="slide-7">
+        <div class="slide-bg"></div>
+        <img class="slide-img-real" src="images/dream8.jpeg" alt="Cherry Blossom Walk">
+        <div class="slide-label">Sunset Together</div>
+        
+      </div>
+    </div>
+
+    <!-- Dot nav -->
+    <div class="slide-dots" id="slideDots"></div>
+
+    <!-- Dream captions -->
+    <div class="dream-captions" data-reveal>
+      <p class="dream-caption-line">Maybe we haven't met yet...</p>
+      <p class="dream-caption-line">But in every dream...</p>
+      <p class="dream-caption-line">Every imagination...</p>
+      <p class="dream-caption-line">And every future...</p>
+      <p class="dream-caption-line gold">"It's always us ❤️🫂😘🫶"</p>
+    </div>
+
+    <a href="giftbox.html" class="btn-romantic" data-reveal>
+      <span>Open The Magic Gift ❤️</span>
+    </a>
+  </main>
+
+  <script src="js/script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const totalSlides = 8;
+      let current = 0;
+      const dotsEl = document.getElementById('slideDots');
+
+      // Build dots
+      for (let i = 0; i < totalSlides; i++) {
+        const d = document.createElement('div');
+        d.className = 'slide-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => goTo(i));
+        dotsEl.appendChild(d);
+      }
+
+      function goTo(idx) {
+        document.getElementById('slide-' + current).classList.remove('active');
+        dotsEl.children[current].classList.remove('active');
+        current = idx;
+        document.getElementById('slide-' + current).classList.add('active');
+        dotsEl.children[current].classList.add('active');
+      }
+
+      // Auto-advance
+      setInterval(() => goTo((current + 1) % totalSlides), 3200);
+
+      // Falling petals
+      function spawnPetal() {
+        const el = document.createElement('div');
+        el.className = 'petal';
+        el.textContent = ['🌸','🌺','✨','🍃','💮'][Math.floor(Math.random()*5)];
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.fontSize = (Math.random() * 10 + 12) + 'px';
+        el.style.animationDuration = (Math.random() * 6 + 8) + 's';
+        el.style.animationDelay = Math.random() * 3 + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 15000);
+      }
+      for (let i = 0; i < 12; i++) setTimeout(spawnPetal, i * 600);
+      setInterval(spawnPetal, 1800);
+    });
+  </script>
+</body>
+</html>
